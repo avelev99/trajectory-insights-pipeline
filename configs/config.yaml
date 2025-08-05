@@ -1,0 +1,66 @@
+# 1. File Paths
+paths:
+  raw_data_dir: "data/raw/Geolife Trajectories 1.3/Data"
+  processed_dir: "data/processed/"
+  output_dir: "outputs/"
+
+# 2. Preprocessing Parameters
+preprocessing:
+  # Time gap in minutes to split a trajectory into separate trips
+  trip_segmentation_threshold_min: 30
+  # Minimum distance in meters for a point to be considered part of a trip
+  min_trip_distance_m: 100
+
+# 3. Stay-Point Detection (DBSCAN)
+stay_point_detection:
+  # Max distance between points in a neighborhood (in meters)
+  eps_meters: 150
+  # Min number of points to form a dense region (a stay-point)
+  min_samples: 5
+  # Geohash precision for spatial indexing
+  geohash_precision: 7
+
+# 3b. Stay-Point Detection (HDBSCAN)
+clustering_hdbscan:
+  # Minimum size of clusters (points)
+  min_cluster_size: 5
+  # Core distance definition; can be null to default to min_cluster_size
+  min_samples: null
+  # Epsilon for cluster selection in meters (0.0 for default HDBSCAN behavior)
+  cluster_selection_epsilon_m: 0.0
+
+# 4. Feature Engineering
+features:
+  # Speed limit in km/h to filter out unrealistic GPS points
+  max_speed_kmh: 200
+  # Extended feature controls
+  stop_density:
+    window_s: 300
+  accel_variability:
+    window_s: 60
+
+# 5. Analysis Parameters
+analysis:
+  # List of user IDs to include in the analysis (or 'all' for everyone)
+  user_ids: ['010', '020']
+
+# 6. Modeling
+modeling:
+  # Toggle to include extended features in prepare_trip_dataset
+  use_extended_features: true
+
+# 7. OSRM Map Matching
+osrm:
+  base_url: "http://localhost:5000"
+  gps_accuracy_m: 10.0
+  radii_cap: 100.0
+
+# 8. Routes (Matched variants)
+routes:
+  matched:
+    min_support: 5
+    spatial_precision: 0.0001
+    time_bin_min: 15
+    detour:
+      deviation_threshold_m: 200
+      min_deviation_span_m: 300
